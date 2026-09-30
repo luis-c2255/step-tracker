@@ -16,24 +16,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         steps: Number(r.steps),
         exchangedSteps: Number(r.exchanged_steps),
         coinsEarned: Number(r.coins_earned),
+        activeCalories: Number(r.active_calories),
+        floorsClimbed: Number(r.floors_climbed),
       }))
       return res.status(200).json(rows)
     }
 
     if (req.method === 'POST') {
-      const { id, date, steps, exchangedSteps, coinsEarned } = req.body
+      const { id, date, steps, exchangedSteps, coinsEarned, activeCalories, floorsClimbed } = req.body
       await db.execute({
-        sql: `INSERT INTO steps (id, date, steps, exchanged_steps, coins_earned) VALUES (?, ?, ?, ?, ?)`,
-        args: [id, date, steps, exchangedSteps, coinsEarned],
+        sql: `INSERT INTO steps (id, date, steps, exchanged_steps, coins_earned, active_calories, floors_climbed) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        args: [id, date, steps, exchangedSteps, coinsEarned, activeCalories, floorsClimbed],
       })
       return res.status(201).json({ success: true })
     }
 
     if (req.method === 'PUT') {
-      const { id, date, steps, exchangedSteps, coinsEarned } = req.body
+      const { id, date, steps, exchangedSteps, coinsEarned, activeCalories, floorsClimbed } = req.body
       await db.execute({
-        sql: `UPDATE steps SET date = ?, steps = ?, exchanged_steps = ?, coins_earned = ? WHERE id = ?`,
-        args: [date, steps, exchangedSteps, coinsEarned, id],
+        sql: `UPDATE steps SET date = ?, steps = ?, exchanged_steps = ?, coins_earned = ?, active_calories = ?, floors_climbed = ? WHERE id = ?`,
+        args: [date, steps, exchangedSteps, coinsEarned, activeCalories, floorsClimbed, id],
       })
       return res.status(200).json({ success: true })
     }

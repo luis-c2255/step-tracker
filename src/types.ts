@@ -4,6 +4,8 @@ export interface StepEntry {
   steps: number
   exchangedSteps: number
   coinsEarned: number
+  activeCalories: number
+  floorsClimbed: number
 }
 
 export interface WeWardsActivity {

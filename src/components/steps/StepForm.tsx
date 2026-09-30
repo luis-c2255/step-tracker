@@ -8,6 +8,8 @@ export default function StepForm() {
   const [steps, setSteps] = useState('')
   const [exchangedSteps, setExchangedSteps] = useState('')
   const [coinsEarned, setCoinsEarned] = useState('')
+  const [activeCalories, setActiveCalories] = useState('')
+  const [floorsClimbed, setFloorsClimbed] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -19,18 +21,22 @@ export default function StepForm() {
       steps: Number(steps),
       exchangedSteps: Number(exchangedSteps) || 0,
       coinsEarned: Number(coinsEarned) || 0,
+      activeCalories: Number(activeCalories) || 0,
+      floorsClimbed: Number(floorsClimbed) || 0,
     })
 
     // Reset form (keep date, clear the rest)
     setSteps('')
     setExchangedSteps('')
     setCoinsEarned('')
+    setActiveCalories('')
+    setFloorsClimbed('')
   }
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-slate-800 rounded-xl p-4 md:p-6 grid grid-cols-2 md:grid-cols-4 gap-4 items-end"
+      className="bg-slate-800 rounded-xl p-4 md:p-6 grid grid-cols-2 md:grid-cols-3 gap-4 items-end"
     >
       <div className="flex flex-col gap-1">
         <label className="text-xs text-slate-400">Date</label>
@@ -76,10 +82,31 @@ export default function StepForm() {
           className="bg-slate-700 text-white rounded-lg px-3 py-2 text-sm"
         />
       </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-xs text-slate-400">Active Calories</label>
+        <input
+          type="number"
+          value={activeCalories}
+          onChange={e => setActiveCalories(e.target.value)}
+          placeholder="e.g. 350"
+          className="bg-slate-700 text-white rounded-lg px-3 py-2 text-sm"
+        />
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label className="text-xs text-slate-400">Floors Climbed</label>
+        <input
+          type="number"
+          value={floorsClimbed}
+          onChange={e => setFloorsClimbed(e.target.value)}
+          placeholder="e.g. 8"
+          className="bg-slate-700 text-white rounded-lg px-3 py-2 text-sm"
+        />
+      </div>
 
       <button
         type="submit"
-        className="col-span-2 md:col-span-4 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-lg py-2 transition-colors"
+        className="col-span-2 md:col-span-3 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-lg py-2 transition-colors"
       >
         Add Entry
       </button>

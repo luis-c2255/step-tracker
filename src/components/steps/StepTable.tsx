@@ -12,6 +12,8 @@ interface EditState {
   steps: string
   exchangedSteps: string
   coinsEarned: string
+  activeCalories: string
+  floorsClimbed: string
 }
 
 export default function StepTable({ monthKey }: StepTableProps) {
@@ -28,6 +30,8 @@ export default function StepTable({ monthKey }: StepTableProps) {
       steps: String(row.steps),
       exchangedSteps: String(row.exchangedSteps),
       coinsEarned: String(row.coinsEarned),
+      activeCalories: String(row.activeCalories),
+      floorsClimbed: String(row.floorsClimbed),
     })
   }
 
@@ -43,6 +47,8 @@ export default function StepTable({ monthKey }: StepTableProps) {
       steps: Number(editState.steps) || 0,
       exchangedSteps: Number(editState.exchangedSteps) || 0,
       coinsEarned: Number(editState.coinsEarned) || 0,
+      activeCalories: Number(editState.activeCalories) || 0,
+      floorsClimbed: Number(editState.floorsClimbed) || 0,
     })
     cancelEdit()
   }
@@ -64,8 +70,10 @@ export default function StepTable({ monthKey }: StepTableProps) {
             <th className="px-4 py-3">Steps</th>
             <th className="px-4 py-3">Exchanged</th>
             <th className="px-4 py-3">Distance (km)</th>
-            <th className="px-4 py-3">% Change</th>
+            <th className="px-4 py-3">Steps Diff.</th>
             <th className="px-4 py-3">Coins</th>
+            <th className="px-4 py-3">Calories</th>
+            <th className="px-4 py-3">Floors</th>
             <th className="px-4 py-3"></th>
           </tr>
         </thead>
@@ -110,6 +118,22 @@ export default function StepTable({ monthKey }: StepTableProps) {
                       className="bg-slate-700 rounded px-2 py-1 text-sm w-20"
                     />
                   </td>
+                  <td className="px-4 py-2">
+                    <input
+                      type="number"
+                      value={editState.activeCalories}
+                      onChange={e => setEditState({ ...editState, activeCalories: e.target.value })}
+                      className="bg-slate-700 rounded px-2 py-1 text-sm w-20"
+                    />
+                  </td>
+                  <td className="px-4 py-2">
+                    <input
+                      type="number"
+                      value={editState.floorsClimbed}
+                      onChange={e => setEditState({ ...editState, floorsClimbed: e.target.value })}
+                      className="bg-slate-700 rounded px-2 py-1 text-sm w-20"
+                    />
+                  </td>
                   <td className="px-4 py-3 flex gap-2">
                     <button onClick={() => saveEdit(row.id)} className="text-emerald-400 hover:text-emerald-300">
                       <Check size={16} />
@@ -129,16 +153,18 @@ export default function StepTable({ monthKey }: StepTableProps) {
                 <td className="px-4 py-3">{row.exchangedSteps.toLocaleString()}</td>
                 <td className="px-4 py-3">{row.distance.toFixed(2)}</td>
                 <td className="px-4 py-3">
-                  {row.percentChange === null ? (
+                  {row.stepsDifference === null ? (
                     <span className="text-slate-500">—</span>
                   ) : (
-                    <span className={row.percentChange >= 0 ? 'text-emerald-400' : 'text-red-400'}>
-                      {row.percentChange >= 0 ? '+' : ''}
-                      {row.percentChange.toFixed(1)}%
+                    <span className={row.stepsDifference >= 0 ? 'text-emerald-400' : 'text-red-400'}>
+                      {row.stepsDifference >= 0 ? '+' : ''}
+                      {row.stepsDifference.toLocaleString()}
                     </span>
                   )}
                 </td>
                 <td className="px-4 py-3">{row.coinsEarned}</td>
+                <td className="px-4 py-3">{row.activeCalories.toLocaleString()}</td>
+                <td className="px-4 py-3">{row.floorsClimbed.toLocaleString()}</td>
                 <td className="px-4 py-3 flex gap-2">
                   <button
                     onClick={() => startEdit(row)}

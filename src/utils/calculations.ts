@@ -22,7 +22,7 @@ export function getMonthRows(allEntries: StepEntry[], monthKey: string) {
     .map((entry, index) => ({
       ...entry,
       distance: calculateDistance(entry.steps),
-      percentChange: index === 0 ? null : calculatePercentChange(entry.steps, sorted[index - 1].steps),
+      stepsDifference: index === 0 ? null : calculateStepsDifference(entry.steps, sorted[index - 1].steps),
     }))
     .filter(entry => entry.date.startsWith(monthKey))
 }
@@ -50,6 +50,13 @@ export interface MonthSummary {
   convertedSteps: number
   totalDistance: number
   totalCoins: number
+  totalActiveCalories: number
+  totalFloorsClimbed: number
+  daysLogged: number
+  avgSteps: number
+  avgDistance: number
+  avgActiveCalories: number
+  avgFloorsClimbed: number
 }
 
 export function getMonthSummary(
@@ -65,6 +72,10 @@ export function getMonthSummary(
   const totalDistance = monthSteps.reduce((sum, s) => sum + calculateDistance(s.steps), 0)
   const coinsFromSteps = monthSteps.reduce((sum, s) => sum + s.coinsEarned, 0)
   const coinsFromActivities = monthActivities.reduce((sum, a) => sum + a.coinsEarned, 0)
+  const totalActiveCalories = monthSteps.reduce((sum, s) => sum + s.activeCalories, 0)
+  const totalFloorsClimbed = monthSteps.reduce((sum, s) => sum + s.floorsClimbed, 0)
+
+  const daysLogged = monthSteps.length
 
   return {
     monthKey,
@@ -72,6 +83,13 @@ export function getMonthSummary(
     convertedSteps,
     totalDistance,
     totalCoins: coinsFromSteps + coinsFromActivities,
+    totalActiveCalories,
+    totalFloorsClimbed,
+    daysLogged,
+    avgSteps: daysLogged > 0 ? totalSteps / daysLogged : 0,
+    avgDistance: daysLogged > 0 ? totalDistance / daysLogged : 0,
+    avgActiveCalories: daysLogged > 0 ? totalActiveCalories / daysLogged : 0,
+    avgFloorsClimbed: daysLogged > 0 ? totalFloorsClimbed / daysLogged : 0,
   }
 }
 
@@ -87,4 +105,9 @@ export function getAllMonthSummaries(steps: StepEntry[], activities: WeWardsActi
   return Array.from(monthKeys)
     .sort((a, b) => b.localeCompare(a))
     .map(key => getMonthSummary(steps, activities, key))
+}
+
+export function calculateStepsDifference(current: number, previous: number | null): number | null {
+  if (previous === null) return null
+  return current - previous
 }
